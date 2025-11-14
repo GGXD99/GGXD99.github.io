@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  background: rgba(0,0,0,0);
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+.speedo-container {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.speed-ring {
+  width: 220px;
+  height: 220px;
+  transform: rotate(-130deg);
+}
+
+.speed-ring circle {
+  fill: none;
+  stroke-width: 12;
+  cx: 110;
+  cy: 110;
+  r: 90;
+  stroke-linecap: round;
+}
+
+.speed-ring .bg {
+  stroke: rgba(255,255,255,0.1);
+}
+
+.speed-ring .progress {
+  stroke: #00eaff;
+  stroke-dasharray: 565;
+  stroke-dashoffset: 565;
+  transition: stroke-dashoffset 0.15s linear;
+}
+
+.speed-text {
+  position: absolute;
+  font-size: 44px;
+  font-weight: bold;
+}
+
+.unit {
+  position: absolute;
+  margin-top: 60px;
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.bottom-info {
+  position: absolute;
+  bottom: -10px;
+  font-size: 14px;
+  width: 100%;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.bottom-info div {
+  margin: 3px 0;
+}
