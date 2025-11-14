@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Speedometer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="speedo-container">
+      <svg class="speed-ring">
+          <circle class="bg"></circle>
+          <circle class="progress" id="spd"></circle>
+      </svg>
+
+      <div class="speed-text" id="speedValue">0</div>
+      <div class="unit">km/h</div>
+
+      <div class="bottom-info">
+          <div class="gear">Gear <span id="gearValue">N</span></div>
+          <div class="rpm">RPM <span id="rpmValue">0</span></div>
+      </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
