@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Skin Shop</title>
+
+<style>
+body {
+    margin: 0;
+    background: rgba(0,0,0,0.6);
+    font-family: Arial;
+    overflow: hidden;
+}
+
+#container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+#skin-list {
+    width: 30%;
+    background: rgba(20,20,20,0.9);
+    padding: 20px;
+    overflow-y: scroll;
+}
+
+.skin-item {
+    padding: 14px;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.skin-item:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.skin-item.active {
+    background: #00a2ff;
+}
+
+#preview-area {
+    width: 70%;
+    position: relative;
+}
+
+#rotate-info {
+    color: white;
+    font-size: 18px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+#buttons {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+button {
+    padding: 12px 24px;
+    margin: 10px;
+    background: #00a2ff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #0088cc;
+}
+</style>
+</head>
+
+<body>
+<div id="container">
+    <div id="skin-list"></div>
+
+    <div id="preview-area">
+        <div id="rotate-info">Hold mouse left to rotate</div>
+
+        <div id="buttons">
+            <button onclick="buySkin()">Buy Skin</button>
+            <button onclick="closeShop()">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let skins = [];
+let selectedSkin = null;
+
+window.cef.on("sendSkins", function(listJson) {
+    skins = JSON.parse(listJson);
+
+    let list = document.getElementById("skin-list");
+    list.innerHTML = "";
+
+    skins.forEach((skin, index) => {
+        let item = document.createElement("div");
+        item.className = "skin-item";
+        item.textContent = "Skin ID: " + skin;
+        item.onclick = () => selectSkin(index);
+
+        list.appendChild(item);
+    });
+});
+
+function selectSkin(i)
+{
+    selectedSkin = skins[i];
+
+    // highlight
+    document.querySelectorAll(".skin-item").forEach((el, idx) => {
+        el.classList.toggle("active", idx === i);
+    });
+
+    // ส่ง event ให้ Pawn เปลี่ยนสกินตัวอย่าง
+    cef.emit("previewSkin", selectedSkin);
+}
+
+function buySkin()
+{
+    if (!selectedSkin) return;
+    cef.emit("buySkin", selectedSkin);
+}
+
+function closeShop()
+{
+    cef.emit("closeShop");
+}
+
+// ระบบหมุนตัวละคร
+let rotating = false;
+let lastX = 0;
+
+document.body.onmousedown = (e) => {
+    rotating = true;
+    lastX = e.clientX;
+};
+
+document.body.onmouseup = () => rotating = false;
+
+document.body.onmousemove = (e) => {
+    if (!rotating) return;
+    let dx = e.clientX - lastX;
+    lastX = e.clientX;
+
+    cef.emit("rotateSkin", dx);
+};
+</script>
+</body>
+</html>
